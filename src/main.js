@@ -11,9 +11,9 @@ Vue.use(VueRouter)
 Vue.use(Vuetify)
 
 const routes = [
-  { path: '/', component: RecipeList },
-  { path: '/recipes', component: RecipeList },
-  { path: '/recipe', component: RecipeSingle }
+  { name: 'home', path: '/', component: RecipeList },
+  { name: 'recipes', path: '/recipes', component: RecipeList },
+  { name: 'recipe', path: '/recipe/:id', component: RecipeSingle }
 ];
 
 const router = new VueRouter({

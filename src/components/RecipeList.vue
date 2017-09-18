@@ -1,21 +1,20 @@
 <template>
     <v-container grid-list-lg text-xs-center>
         <v-layout row wrap>
-            <v-flex md4 sm6 xs12 v-for="recipe in recipes" :key="i">
+            <v-flex md4 sm6 xs12 v-for="(recipe, index) in recipes" :key="index">
                 <v-card>
-                    <v-card-media class="white--text" height="200px"
-                        src="http://www.trbimg.com/img-5824e9be/turbine/ct-thanksgiving-restaurants-open-dinner-take-out-chicago-2016">
-                        <v-container fill-height fluid>
-                            <v-layout fill-height>
-                            <v-flex xs12 align-end flexbox>
-                                <span class="headline">{{recipe.name}}</span>
-                            </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-media>
-                    <v-card-title>
+                    <router-link :to="{name:'recipe', params:{id:recipe._id}}">
+                        <v-card-media :src="recipe.metadata.feature_image.url" height="200px">
+                        </v-card-media>
+                    </router-link>
+                    <v-card-title primary-title>
                         <div>
-                            <span>{{recipe.name}}</span>
+                            <h3 class="headline mb-0">
+                                <router-link :to="{name:'recipe', params:{id:recipe._id}}">
+                                    {{recipe.title}}
+                                </router-link>
+                            </h3>
+                            <div>{{recipe.metadata.author}}</div>
                         </div>
                     </v-card-title>
                     <v-card-actions class="white">
@@ -29,6 +28,7 @@
                         <v-btn icon>
                             <v-icon>share</v-icon>
                         </v-btn>
+                        <v-spacer></v-spacer>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -40,11 +40,30 @@
 </template>
 
 <script>
+    import {mapActions,mapGetters} from 'vuex';
+    
     export default {
+        created() {
+            this.$store.dispatch("getRecipes", { self: this })       
+        },
         computed: {
-            recipes(){
-                return this.$store.state.recipes;
-            }
+            ...mapGetters([
+                'recipes'
+            ])
+        },
+        methods:{
+
         }
     }
 </script>
+
+<style lang="stylus" scoped>
+  #keep
+    .card__title
+      display: block
+
+    .headline
+        a
+            color: rgba(0,0,0,0.87)
+            text-decoration: none
+</style>
