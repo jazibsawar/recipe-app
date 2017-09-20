@@ -25,14 +25,11 @@
                         <v-btn icon>
                             <v-icon>delete</v-icon>
                         </v-btn>
-                        <v-btn icon>
-                            <v-icon>share</v-icon>
-                        </v-btn>
                         <v-spacer></v-spacer>
                     </v-card-actions>
                 </v-card>
             </v-flex>
-            <v-btn fixed dark fab bottom right class="pink">
+            <v-btn fixed light fab bottom right class="amber darken-2">
                 <v-icon>add</v-icon>
             </v-btn>
         </v-layout>
@@ -41,11 +38,8 @@
 
 <script>
     import {mapActions,mapGetters} from 'vuex';
-    
+
     export default {
-        created() {
-            this.$store.dispatch("getRecipes", { self: this })       
-        },
         computed: {
             ...mapGetters([
                 'recipes'

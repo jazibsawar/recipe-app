@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Cosmic from 'cosmicjs';
 import config from '../config/config';
+import _ from 'lodash';
 
 Vue.use(Vuex)
 
@@ -15,6 +16,9 @@ const state = {
 const getters = {
     recipes(state){
         return state.recipes;
+    },
+    recipe(state){
+        return (keyword) => _.find(state.recipes,['_id', keyword]);
     }
 }
 
@@ -32,7 +36,10 @@ const actions = {
     getRecipes(context){
         Cosmic.getObjectsByType(config, { type_slug: 'recipes' }, (err, res) => {
             if(!err){
-                context.commit('GET_RECIPES',res.objects.all)
+                context.commit('GET_RECIPES',_.map(res.objects.all, (recipe) =>{
+                    recipe.metadata.youtube_id = `https://www.youtube.com/embed/${recipe.metadata.youtube_id}`;
+                    return recipe;
+                }));
             }
             else
             {
