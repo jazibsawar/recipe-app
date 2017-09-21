@@ -15,7 +15,16 @@ const state = {
         success: false,
         error: false
     },
+    categories: [
+        "Dessert",
+        "Meal"
+    ],
     recipe: {
+        metadata:{
+            feature_image: {
+            },
+            ingredients:[]
+        }
     },
     editForm: false
 }
@@ -23,16 +32,23 @@ const state = {
 // define the possible getters that can be applied to our state
 const getters = {
     recipes(state){
+        console.log(state.recipes);
         return state.recipes;
     },
     recipe(state){
         return (keyword) => _.find(state.recipes,['_id', keyword]);
+    },
+    recipeModel(state){
+        return state.recipe;
     },
     loading(state){
         return state.status.loading;
     },
     editForm(state){
         return state.editForm;
+    },
+    categories(state){
+        return state.categories;
     }
 }
 
@@ -85,6 +101,20 @@ const mutations = {
     },
     TOGGLE_EDITFORM(state,payload){
         state.editForm = payload;
+    },
+    ADD_INGREDIANT_RECIPE(state,payload){
+        state.recipe.metadata.ingredients.push({
+            ingredient: payload
+        });
+    },
+    REMOVE_INGREDIANT_RECIPE(state,payload){
+        state.recipe.metadata.ingredients.splice(payload, 1);
+    },
+    SET_RECIPE_IMAGE(state,payload){
+        state.recipe.metadata.feature_image.url = payload;
+    },
+    SET_RECIPE_FILE(state,payload){
+        state.recipe.metadata.feature_image.file = payload;
     }
 }
 
@@ -95,10 +125,7 @@ const actions = {
         context.commit('LOADING');
         Cosmic.getObjectsByType(config, { type_slug: config.object_type }, (err, res) => {
             if(!err){
-                context.commit('SET_RECIPES',_.map(res.objects.all, (recipe) =>{
-                    recipe.metadata.youtube_id = `https://www.youtube.com/embed/${recipe.metadata.youtube_id}`;
-                    return recipe;
-                }));
+                context.commit('SET_RECIPES',res.objects.all);
                 context.commit('SUCCESS');
             }
             else
@@ -126,6 +153,18 @@ const actions = {
     },
     setEditForm(context,payload){
         context.commit('TOGGLE_EDITFORM',payload);
+    },
+    addIngrediantInRecipe(context,payload){
+        context.commit('ADD_INGREDIANT_RECIPE',payload);
+    },
+    removeIngrediantInRecipe(context,payload){
+        context.commit('REMOVE_INGREDIANT_RECIPE',payload);
+    },
+    setRecipeImage(context,payload){
+        context.commit('SET_RECIPE_IMAGE',payload);
+    },
+    setRecipeFile(context,payload){
+        context.commit('SET_RECIPE_FILE',payload);
     }
 }
 

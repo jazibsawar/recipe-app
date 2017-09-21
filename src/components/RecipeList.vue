@@ -23,7 +23,7 @@
                         </v-card-title>
                         <v-card-actions class="white">
                             <v-spacer></v-spacer>
-                            <v-btn icon :disabled="loading">
+                            <v-btn icon :disabled="loading" @click="openEditForm(recipe)">
                                 <v-icon>edit</v-icon>
                             </v-btn>
                             <v-btn icon :disabled="loading" @click="deleteRecipe(recipe._id)">
@@ -33,7 +33,7 @@
                         </v-card-actions>
                     </v-card>
                 </v-flex>
-                <v-btn fixed light fab bottom right class="amber darken-2" @click="openRecipeForm" :disabled="loading" v-if="recipes.length > 0" >
+                <v-btn fixed light fab bottom right class="amber darken-2" @click="openAddForm" :disabled="loading" v-if="recipes.length > 0" >
                     <v-icon>add</v-icon>
                 </v-btn>
             </v-layout>
@@ -53,11 +53,16 @@
         },
         computed: {
             ...mapGetters([
-                'recipes','loading','editForm'
+                'recipes','loading','editForm','editorOption'
             ])
         },
         methods:{
-            openRecipeForm(){
+            openAddForm(){
+                this.$store.dispatch('setRecipe',{metadata:{feature_image:{},ingredients:[]}});
+                this.$store.dispatch('setEditForm',true);
+            },
+            openEditForm(recipe){
+                this.$store.dispatch('setRecipe',recipe);
                 this.$store.dispatch('setEditForm',true);
             },
             deleteRecipe(id){

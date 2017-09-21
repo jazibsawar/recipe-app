@@ -39,7 +39,7 @@
                     <v-layout row wrap class="recipe_content_wrap">
                         <v-flex xs12 md8 offset-md2>
                             <div class="video-responsive">
-                                <iframe width="560" height="315" :src="recipe.metadata.youtube_id" frameborder="0" allowfullscreen></iframe>
+                                <iframe width="560" height="315" :src="'https://www.youtube.com/embed/'+recipe.metadata.youtube_id" frameborder="0" allowfullscreen></iframe>
                             </div>
                         </v-flex>
                     </v-layout>
