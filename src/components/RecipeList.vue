@@ -58,11 +58,12 @@
         },
         methods:{
             openAddForm(){
-                this.$store.dispatch('setRecipe',{metadata:{feature_image:{},ingredients:[]}});
+                this.$store.dispatch('setRecipeDefault');
                 this.$store.dispatch('setEditForm',true);
             },
             openEditForm(recipe){
                 this.$store.dispatch('setRecipe',recipe);
+                this.$store.dispatch('toggleEditting');
                 this.$store.dispatch('setEditForm',true);
             },
             deleteRecipe(id){

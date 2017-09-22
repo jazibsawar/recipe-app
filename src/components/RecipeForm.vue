@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="editForm" scrollable persistent width="50%">
+    <v-dialog v-model="editForm" scrollable persistent width="50vw">
         <v-card>
           <v-card-title>
             <span class="headline">Recipe</span>
@@ -70,7 +70,7 @@
                   <form enctype="multipart/form-data" novalidate>
                     <input type="file" @change="onFileChange" accept="image/*" data-vv-name="image" v-validate="'required|mimes:image/*'" required />
                     <div class="input-group fileUploadError">
-                      <div class="input-group__error" v-show="errors.has('image')">
+                      <div class="input-group__error" v-show="errors.has('image') && !editting">
                         {{ errors.first('image') }}
                       </div>
                     </div>
@@ -83,8 +83,8 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="blue--text darken-1" flat @click="closeDialog">Close</v-btn>
-            <v-btn class="blue--text darken-1" flat @click="saveRecipe(recipeModel)">Save</v-btn>
+            <v-btn error dark @click="closeDialog" :disabled="loading">Close</v-btn>
+            <v-btn :loading="loading" :disabled="loading" primary dark @click="saveRecipe(recipeModel)">Save</v-btn>
           </v-card-actions>
         </v-card>
     </v-dialog>
@@ -96,16 +96,28 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   computed: {
     ...mapGetters([
-      'editForm', 'recipeModel','categories'
+      'editForm', 'recipeModel','categories','editting','loading'
     ])
   },
   methods: {
     closeDialog() {
       this.$validator.reset();
+      this.$store.dispatch('setRecipeDefault');
       this.$store.dispatch('setEditForm', false);
     },
     saveRecipe(recipe) {
       this.$validator.validateAll();
+      if(this.$store.state.editting){
+        if( (!this.errors.any()) || (this.errors.count() == 1 && this.errors.has('image'))) {
+          this.$store.dispatch('editRecipe', recipe);
+        }
+      }
+      else
+      {
+        if(!this.errors.any()){
+          this.$store.dispatch('addRecipe', recipe);
+        }
+      }
     },
     addIngrediant(item){
       if(item.$refs.input.value){
@@ -155,6 +167,12 @@ export default {
     width: 200px
   .fileUploadError
     padding: 2px 0 0
+  .application .theme--dark.btn.primary.btn--disabled:not(.btn--icon):not(.btn--flat)
+    background-color: #1976d2 !important
+    border-color: #1976d2 !important
+  .application .theme--dark.btn.error.btn--disabled:not(.btn--icon):not(.btn--flat)
+    background-color: #ff5252 !important
+    border-color: #ff5252 !important
   
 </style>
 

@@ -26,13 +26,13 @@ const state = {
             ingredients:[]
         }
     },
-    editForm: false
+    editForm: false,
+    editting: false
 }
 
 // define the possible getters that can be applied to our state
 const getters = {
     recipes(state){
-        console.log(state.recipes);
         return state.recipes;
     },
     recipe(state){
@@ -49,6 +49,9 @@ const getters = {
     },
     categories(state){
         return state.categories;
+    },
+    editting(state){
+        return state.editting;
     }
 }
 
@@ -58,7 +61,7 @@ const mutations = {
         state.recipes = payload;
     },
     SET_RECIPE(state,payload){
-        state.recipe = payload;
+        state.recipe = _.cloneDeep(payload);
     },
     ADD_RECIPE(state,payload){
         state.recipes.unshift(payload);
@@ -115,6 +118,18 @@ const mutations = {
     },
     SET_RECIPE_FILE(state,payload){
         state.recipe.metadata.feature_image.file = payload;
+    },
+    TOGGLE_EDITTING(state){
+        state.editting = !state.editting;
+    },
+    SET_RECIPE_DEFAULT(state){
+        state.recipe = {
+            metadata:{
+                feature_image: {
+                },
+                ingredients:[]
+            }
+        };
     }
 }
 
@@ -137,11 +152,23 @@ const actions = {
     setRecipe(context,payload){
         context.commit('SET_RECIPE',payload);
     },
-    addRecipe(context){
-
+    setRecipeDefault(context){
+        context.commit('SET_RECIPE_DEFAULT');
     },
-    editRecipe(context){
-
+    addRecipe(context,payload){
+        context.commit('LOADING');
+        context.commit('ADD_RECIPE',payload);
+        context.commit('SET_RECIPE_DEFAULT');
+        context.commit('TOGGLE_EDITFORM',false);
+        context.commit('SUCCESS');
+    },
+    editRecipe(context,payload){
+        context.commit('LOADING');
+        context.commit('EDIT_RECIPE',payload);
+        context.commit('SET_RECIPE_DEFAULT');
+        context.commit('TOGGLE_EDITTING');
+        context.commit('TOGGLE_EDITFORM',false);
+        context.commit('SUCCESS');
     },
     deleteRecipe(context,payload){
         context.commit('LOADING');
@@ -165,6 +192,9 @@ const actions = {
     },
     setRecipeFile(context,payload){
         context.commit('SET_RECIPE_FILE',payload);
+    },
+    toggleEditting(context){
+        context.commit('TOGGLE_EDITTING');
     }
 }
 
