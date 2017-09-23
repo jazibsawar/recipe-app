@@ -3,7 +3,7 @@
         <div>
             <pulse-loader :loading="loading" v-if="!editForm" color="#FFC107"></pulse-loader>
         </div>
-        <v-container fill-height class="noRecipes" v-if="recipes.length == 0">
+        <v-container fill-height class="noRecipes" v-if="recipes.length == 0 && !loading">
             <v-layout row wrap align-center>
                 <v-flex class="text-xs-center">
                     <h4>There is no recipe please add one!</h4>
