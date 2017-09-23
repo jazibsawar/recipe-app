@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Cosmic from 'cosmicjs';
-import config from '../config/config';
+import Request from '../common/request'
 import _ from 'lodash';
 
 Vue.use(Vuex)
@@ -58,10 +57,11 @@ const getters = {
 // define the possible mutations that can be applied to our state
 const mutations = {
     SET_RECIPES(state,payload){
+        console.log(payload);
         state.recipes = payload;
     },
     SET_RECIPE(state,payload){
-        state.recipe = _.cloneDeep(payload);
+        state.recipe = payload;
     },
     ADD_RECIPE(state,payload){
         state.recipes.unshift(payload);
@@ -71,7 +71,7 @@ const mutations = {
     },
     DELETE_RECIPE(state,payload){
         _.remove(state.recipes, function (recipe) {
-            return recipe._id === payload
+            return recipe._id === payload._id
         });
     },
     LOADING(state){
@@ -138,42 +138,59 @@ const mutations = {
 const actions = {
     getRecipes(context){
         context.commit('LOADING');
-        Cosmic.getObjectsByType(config, { type_slug: config.object_type }, (err, res) => {
-            if(!err){
-                context.commit('SET_RECIPES',res.objects.all);
-                context.commit('SUCCESS');
-            }
-            else
-            {
-                context.commit('ERROR',err);
-            }
+        Request.getRecipes().then(recipes => {
+            context.commit('SET_RECIPES',recipes);
+            context.commit('SUCCESS');
+        })
+        .catch(e => {
+            context.commit('ERROR',e);
         });
     },
     setRecipe(context,payload){
-        context.commit('SET_RECIPE',payload);
+        context.commit('SET_RECIPE',_.cloneDeep(payload));
     },
     setRecipeDefault(context){
         context.commit('SET_RECIPE_DEFAULT');
     },
     addRecipe(context,payload){
         context.commit('LOADING');
-        context.commit('ADD_RECIPE',payload);
-        context.commit('SET_RECIPE_DEFAULT');
-        context.commit('TOGGLE_EDITFORM',false);
-        context.commit('SUCCESS');
+        Request.addRecipe(payload).then(recipe => {
+            context.commit('ADD_RECIPE',recipe);
+            context.commit('SET_RECIPE_DEFAULT');
+            context.commit('TOGGLE_EDITFORM',false);
+            context.commit('SUCCESS');
+        })
+        .catch(e => {
+            context.commit('ERROR',e);
+        });
     },
     editRecipe(context,payload){
         context.commit('LOADING');
-        context.commit('EDIT_RECIPE',payload);
-        context.commit('SET_RECIPE_DEFAULT');
-        context.commit('TOGGLE_EDITTING');
-        context.commit('TOGGLE_EDITFORM',false);
-        context.commit('SUCCESS');
+        Request.editRecipe(payload).then(recipe => {
+            context.commit('EDIT_RECIPE',recipe);
+            context.commit('SET_RECIPE_DEFAULT');
+            context.commit('TOGGLE_EDITTING');
+            context.commit('TOGGLE_EDITFORM',false);
+            context.commit('SUCCESS');
+        })
+        .catch(e => {
+            context.commit('ERROR',e);
+        });
     },
     deleteRecipe(context,payload){
         context.commit('LOADING');
-        context.commit('DELETE_RECIPE',payload);
-        context.commit('SUCCESS');
+        Request.deleteRecipe(payload).then((res) => {
+            if(res.status == 200){
+                context.commit('DELETE_RECIPE',payload);
+                context.commit('SUCCESS');
+            }
+            else{
+                context.commit('ERROR',res);
+            }
+        })
+        .then((e) => {
+            context.commit('ERROR',e);
+        });
     },
     clearError(context){
         context.commit('CLEAR_ERROR');

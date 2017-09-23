@@ -3,7 +3,7 @@
     <v-dialog v-model="editForm" scrollable persistent width="50vw">
         <v-card>
           <v-card-title>
-            <span class="headline">Recipe</span>
+            <span class="headline">{{ editting ? 'Edit ' : 'Add ' }}Recipe</span>
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text style="height: 70vh;">

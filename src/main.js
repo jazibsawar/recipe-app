@@ -13,7 +13,7 @@ Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(VeeValidate)
 Vue.use(wysiwyg,{
-  hideModules: { "bold": true, "table": true, "image": true }
+  hideModules: { bold: true, table: true, image: true }
 })
 
 const routes = [
