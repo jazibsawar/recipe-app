@@ -46,13 +46,11 @@
                 <v-pagination :disabled="loading" :length="pagination.total" v-model="pagination.page" :total-visible="5" circle></v-pagination>
             </div>
             <recipe-form></recipe-form>
-            <v-snackbar :timeout='3000' success v-model="success">
+            <v-snackbar :timeout="2000" success v-model="success">
                 Request done successfully!
-                <v-btn dark flat>Close</v-btn>
             </v-snackbar>
-            <v-snackbar :timeout='3000' error v-model="error">
+            <v-snackbar :timeout="3000" error v-model="error">
                 There was an error during request!
-                <v-btn dark flat>Close</v-btn>
             </v-snackbar>
         </v-container>
     </div>
@@ -66,12 +64,25 @@
             'recipe-form': RecipeForm
         },
         computed: {
+            success: {
+                get: function(){
+                    return this.$store.state.status.success;
+                },
+                set: function(value){
+                    this.$store.dispatch('clearError');
+                }
+            },
+            error: {
+                get: function(){
+                    return this.$store.state.status.error;
+                },
+                set: function(value){
+                    this.$store.dispatch('clearError');
+                }
+            },
             ...mapGetters([
-                'recipes','pagination','loading','editForm','success','error','page'
+                'recipes','pagination','loading','editForm','page'
             ])
-        },
-        mounted() {
-            this.getRecipes();
         },
         watch: {
             page: 'getRecipes'
@@ -90,6 +101,7 @@
                 this.$store.dispatch('deleteRecipe',recipe);
             },
             getRecipes(){
+                console.log('getRecipes');
                 this.$store.dispatch('getRecipes');
             }
         }

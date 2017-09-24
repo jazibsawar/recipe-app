@@ -31,5 +31,8 @@ new Vue({
   store,
   el: '#app',
   router,
-  render: h => h(App)
+  render: h => h(App),
+  beforeMount: function(){
+    this.$store.dispatch("getRecipes");
+  }
 })

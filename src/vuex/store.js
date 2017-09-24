@@ -48,12 +48,6 @@ const getters = {
     loading(state){
         return state.status.loading;
     },
-    error(state){
-        return !!state.status.error;
-    },
-    success(state){
-        return state.status.success;
-    },
     editForm(state){
         return state.editForm;
     },
