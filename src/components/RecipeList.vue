@@ -32,10 +32,10 @@
                         <v-card-actions class="white">
                             <v-spacer></v-spacer>
                             <v-btn icon :disabled="loading" @click="openEditForm(recipe)">
-                                <v-icon>edit</v-icon>
+                                <v-icon class="blue--text">edit</v-icon>
                             </v-btn>
                             <v-btn icon :disabled="loading" @click="deleteRecipe(recipe)">
-                                <v-icon>delete</v-icon>
+                                <v-icon class="red--text">delete</v-icon>
                             </v-btn>
                             <v-spacer></v-spacer>
                         </v-card-actions>
@@ -117,4 +117,11 @@
         bottom: 0
     .recipes-pagination
         margin-top: 80px
+</style>
+<style lang="css">
+.application--light .pagination__item--active{
+    background: #FFC107;
+    color: #000;
+    font-weight: bold;
+}
 </style>
