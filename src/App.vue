@@ -1,108 +1,55 @@
 <template>
-  <v-app light>
-    <v-navigation-drawer
-      persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
-      enable-resize-watcher
-    >
-      <v-list>
-        <v-list-tile 
-          v-for="(item, i) in items"
-          :key="i"
-          value="true"
-        >
-          <v-list-tile-action>
-            <v-icon light v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar fixed>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn 
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+  <v-app toolbar id="keep">
+    <v-toolbar class="amber" fixed>
+      <v-progress-linear class="app-loader" v-bind:indeterminate="loading" v-if="loading" height="5" success></v-progress-linear>
+      <span class="title">
+        <router-link :to="{name:'home'}">
+          Recipe <span class="text">App</span>
+        </router-link>
+      </span>
       <v-spacer></v-spacer>
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>menu</v-icon>
-      </v-btn>
     </v-toolbar>
     <main>
-      <v-container fluid>
-        <v-slide-y-transition mode="out-in">
-          <v-layout column align-center>
-            <img src="/public/v.png" alt="Vuetify.js" class="mb-5" />
-            <blockquote>
-              &#8220;First, solve the problem. Then, write the code.&#8221;
-              <footer>
-                <small>
-                  <em>&mdash;John Johnson</em>
-                </small>
-              </footer>
-            </blockquote>
-          </v-layout>
-        </v-slide-y-transition>
+      <v-container fluid class="grey lighten-4">
+        <!--v-router-->
+        <router-view></router-view>
       </v-container>
     </main>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-    >
-      <v-list>
-        <v-list-tile @click.native="right = !right">
-          <v-list-tile-action>
-            <v-icon light>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed">
-      <span>&copy; 2017</span>
+    <v-footer class="amber darken-2">
+      <v-spacer></v-spacer>
+        <span class="dark--text">Proudly powered by <a href="http://cosmicjs.com" target="_blank">@cosmicjs</a></span>
+      <v-spacer></v-spacer>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+  import {mapActions,mapGetters} from 'vuex';
   export default {
-    data () {
-      return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        items: [
-          { icon: 'bubble_chart', title: 'Inspire' }
-        ],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
-      }
+    computed: {
+        ...mapGetters([
+            'loading'
+        ])
     }
   }
 </script>
+
+<style lang="stylus">
+  #keep
+    .text
+      font-weight: 400
+    .title
+      a
+        color: rgba(0,0,0,0.87)
+        text-decoration: none
+    footer
+      a
+        color: rgba(0,0,0,0.87)
+        text-decoration: none 
+        font-weight: 600
+    .app-loader
+      position: absolute
+      margin: 0
+      padding: 0
+      top: 0
+</style>
