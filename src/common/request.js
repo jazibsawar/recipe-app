@@ -9,6 +9,7 @@ function getRecipes(pagination){
         const params = {
             type_slug: config.object_type,
             limit: pagination.limit,
+            sort: '-created_at',
             skip: (pagination.page - 1 ) * pagination.limit
         };
         Cosmic.getObjectsByType(config, params, (err, res) => {

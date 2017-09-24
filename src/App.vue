@@ -1,6 +1,7 @@
 <template>
   <v-app toolbar id="keep">
     <v-toolbar class="amber" fixed>
+      <v-progress-linear class="app-loader" v-bind:indeterminate="loading" v-if="loading" height="5" success></v-progress-linear>
       <span class="title">
         <router-link :to="{name:'home'}">
           Recipe <span class="text">App</span>
@@ -23,11 +24,12 @@
 </template>
 
 <script>
+  import {mapActions,mapGetters} from 'vuex';
   export default {
-    data(){
-      return {
-
-      }
+    computed: {
+        ...mapGetters([
+            'loading'
+        ])
     }
   }
 </script>
@@ -45,4 +47,9 @@
         color: rgba(0,0,0,0.87)
         text-decoration: none 
         font-weight: 600
+    .app-loader
+      position: absolute
+      margin: 0
+      padding: 0
+      top: 0
 </style>

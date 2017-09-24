@@ -48,6 +48,12 @@ const getters = {
     loading(state){
         return state.status.loading;
     },
+    error(state){
+        return !!state.status.error;
+    },
+    success(state){
+        return state.status.success;
+    },
     editForm(state){
         return state.editForm;
     },
@@ -59,6 +65,9 @@ const getters = {
     },
     pagination(state){
         return state.pagination;
+    },
+    page(state){
+        return state.pagination.page;
     }
 }
 
@@ -68,7 +77,6 @@ const mutations = {
         state.pagination.total = Math.ceil(payload / state.pagination.limit);
     },
     SET_RECIPES(state,payload){
-        console.log(payload);
         state.recipes = payload;
     },
     SET_RECIPE(state,payload){

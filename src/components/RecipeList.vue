@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div>
-            <pulse-loader :loading="loading" v-if="!editForm" color="#FFC107"></pulse-loader>
-        </div>
         <v-container fill-height class="noRecipes" v-if="recipes.length == 0 && !loading">
             <v-layout row wrap align-center>
                 <v-flex class="text-xs-center">
@@ -49,6 +46,14 @@
                 <v-pagination :disabled="loading" :length="pagination.total" v-model="pagination.page" :total-visible="5" circle></v-pagination>
             </div>
             <recipe-form></recipe-form>
+            <v-snackbar :timeout='3000' success v-model="success">
+                Request done successfully!
+                <v-btn dark flat>Close</v-btn>
+            </v-snackbar>
+            <v-snackbar :timeout='3000' error v-model="error">
+                There was an error during request!
+                <v-btn dark flat>Close</v-btn>
+            </v-snackbar>
         </v-container>
     </div>
 </template>
@@ -56,25 +61,20 @@
 <script>
     import {mapActions,mapGetters} from 'vuex';
     import RecipeForm from './RecipeForm.vue';
-    import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
     export default {
         components:{
-            'recipe-form': RecipeForm,
-            'pulse-loader': PulseLoader
+            'recipe-form': RecipeForm
         },
         computed: {
             ...mapGetters([
-                'recipes','pagination','loading','editForm'
+                'recipes','pagination','loading','editForm','success','error','page'
             ])
         },
         mounted() {
             this.getRecipes();
         },
         watch: {
-            pagination: {
-                handler: 'getRecipes',
-                deep: true
-            }
+            page: 'getRecipes'
         },
         methods:{
             openAddForm(){
@@ -117,11 +117,8 @@
         bottom: 0
     .recipes-pagination
         margin-top: 80px
-</style>
-<style lang="css">
-.application--light .pagination__item--active{
-    background: #FFC107;
-    color: #000;
-    font-weight: bold;
-}
+    .pagination >>> li > a.pagination__item--active
+        background: #FFC107
+        color: #000
+        font-weight: bold
 </style>
