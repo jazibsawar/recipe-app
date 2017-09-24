@@ -4,11 +4,16 @@ import _ from 'lodash';
 import {generateRecipeObject} from './paramMapping';
 
 
-function getRecipes(){
+function getRecipes(pagination){
     return new Promise((resolve,reject) => {
-        Cosmic.getObjectsByType(config, { type_slug: config.object_type }, (err, res) => {
+        const params = {
+            type_slug: config.object_type,
+            limit: pagination.limit,
+            skip: (pagination.page - 1 ) * pagination.limit
+        };
+        Cosmic.getObjectsByType(config, params, (err, res) => {
             if(!err){
-                resolve(res.objects.all || []);
+                resolve(res);
             }
             else
             {
@@ -45,9 +50,9 @@ function addRecipe(obj){
 }
 
 function editRecipe(obj){
+    const feature_image = _.find(obj.metafields,['key', 'feature_image']);
     return new Promise((resolve,reject) => {
         if(obj.metadata.feature_image.file){
-            const feature_image = _.find(obj.metafields,['key', 'feature_image']);
             deleteMedia(feature_image.id).then((res) => {
                 if(res.status == 200 ){
                     addMedia(obj.metadata.feature_image.file).then((media) => {
@@ -79,6 +84,8 @@ function editRecipe(obj){
             });
         }
         else{
+            obj.metadata.feature_image.value = feature_image.value;
+            obj.metadata.feature_image.id = feature_image.id;
             const params = generateRecipeObject(obj,true);
             Cosmic.editObject(config, params, (err, res) => {
                 if(!err){

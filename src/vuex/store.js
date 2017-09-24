@@ -26,7 +26,12 @@ const state = {
         }
     },
     editForm: false,
-    editting: false
+    editting: false,
+    pagination: {
+        page: 1,
+        limit: 12,
+        total: 0
+    }
 }
 
 // define the possible getters that can be applied to our state
@@ -51,11 +56,17 @@ const getters = {
     },
     editting(state){
         return state.editting;
+    },
+    pagination(state){
+        return state.pagination;
     }
 }
 
 // define the possible mutations that can be applied to our state
 const mutations = {
+    SET_TOTAL(state,payload){
+        state.pagination.total = Math.ceil(payload / state.pagination.limit);
+    },
     SET_RECIPES(state,payload){
         console.log(payload);
         state.recipes = payload;
@@ -130,6 +141,9 @@ const mutations = {
                 ingredients:[]
             }
         };
+    },
+    PAGINATE(state,payload){
+        state.pagination.page = payload;
     }
 }
 
@@ -138,8 +152,9 @@ const mutations = {
 const actions = {
     getRecipes(context){
         context.commit('LOADING');
-        Request.getRecipes().then(recipes => {
-            context.commit('SET_RECIPES',recipes);
+        Request.getRecipes(context.getters.pagination).then(res => {
+            context.commit('SET_RECIPES',res.objects.all || []);
+            context.commit('SET_TOTAL',res.total || 0);
             context.commit('SUCCESS');
         })
         .catch(e => {
@@ -212,6 +227,10 @@ const actions = {
     },
     toggleEditting(context){
         context.commit('TOGGLE_EDITTING');
+    },
+    paginate(context,payload){
+            context.commit('PAGINATE',payload);
+            context.dispatch('getRecipes');
     }
 }
 

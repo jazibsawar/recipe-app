@@ -7,7 +7,7 @@
             <v-layout row wrap align-center>
                 <v-flex class="text-xs-center">
                     <h4>There is no recipe please add one!</h4>
-                    <v-btn light large class="amber darken-2" @click="openAddForm" :disabled="loading">Add Recipe</v-btn>
+                    <v-btn light large class="amber" @click="openAddForm" :disabled="loading">Add Recipe</v-btn>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -45,6 +45,9 @@
                     <v-icon>add</v-icon>
                 </v-btn>
             </v-layout>
+            <div class="text-xs-center recipes-pagination" v-if="recipes.length > 0">
+                <v-pagination :disabled="loading" :length="pagination.total" v-model="pagination.page" :total-visible="5" circle></v-pagination>
+            </div>
             <recipe-form></recipe-form>
         </v-container>
     </div>
@@ -61,8 +64,17 @@
         },
         computed: {
             ...mapGetters([
-                'recipes','loading','editForm','editorOption'
+                'recipes','pagination','loading','editForm'
             ])
+        },
+        mounted() {
+            this.getRecipes();
+        },
+        watch: {
+            pagination: {
+                handler: 'getRecipes',
+                deep: true
+            }
         },
         methods:{
             openAddForm(){
@@ -76,6 +88,9 @@
             },
             deleteRecipe(recipe){
                 this.$store.dispatch('deleteRecipe',recipe);
+            },
+            getRecipes(){
+                this.$store.dispatch('getRecipes');
             }
         }
     }
@@ -100,4 +115,6 @@
         height: auto
         top: 60px
         bottom: 0
+    .recipes-pagination
+        margin-top: 80px
 </style>
