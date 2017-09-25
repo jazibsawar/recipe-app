@@ -101,7 +101,6 @@
                 this.$store.dispatch('deleteRecipe',recipe);
             },
             getRecipes(){
-                console.log('getRecipes');
                 this.$store.dispatch('getRecipes');
             }
         }
