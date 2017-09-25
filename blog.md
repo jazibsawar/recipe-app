@@ -16,7 +16,7 @@ You’ll need Node JS and npm. Make sure you already have them before you start.
 
 First of all, you have to be sure you have node > 6.x installed, than run the following commands:
 
-```bash
+```javascript
 npm install -g vue-cli
 git clone https://github.com/jazibsawar/recipe-app/
 cd recipe-app
@@ -28,7 +28,7 @@ Browser window will open automatically once you'll run the last command.
 
 `package.json` will look like this.
 
-```json
+```javascript
 {
   "name": "recipe-app",
   "description": "A Vue.js project",
@@ -90,9 +90,9 @@ Browser window will open automatically once you'll run the last command.
 
 Now we will set up our index.html in our root directory where we will change the favicon and you can add meta tags also.
 
-Below is the index.html file. Only code block important here is to include the build script `<script src="./dist/build.js"></script>` at the end of body tag and create a element (`<div id="app"></div>`) where **vue** will bootstrap your application.
+Below is the index.html file. Only code block important here is to include the build script **<script src="./dist/build.js"></script>** at the end of body tag and create a element **<div id="app"></div>** where **vue** will bootstrap your application.
 
-```html
+```javascript
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -576,7 +576,7 @@ import {mapActions,mapGetters} from 'vuex';
 
 This will map getter of vuex store to computed property of Vue and map actions to methods.
 
-```html
+```javascript
 <template>
     <div>
         <v-container fill-height class="noRecipes" v-if="recipes.length == 0 && !loading">
@@ -719,7 +719,7 @@ This will map getter of vuex store to computed property of Vue and map actions t
 
 RecipeForm.vue is used to submit the form and do the basic validation.
 
-```html
+```javascript
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="editForm" scrollable persistent width="50vw">
@@ -901,7 +901,7 @@ export default {
 
 RecipeSingle.vue is rendering single recipe.
 
-```html
+```javascript
 <template>
     <div id="recipe_single">
         <div v-if="recipe">
