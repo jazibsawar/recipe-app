@@ -1,4 +1,4 @@
-<img src="https://cosmicjs.com/images/logo.svg" width="50%" alt="Vuejs app on Cosmicjs" align="center" />
+<div align="center"><img src="https://cosmicjs.com/images/logo.svg" width="50%" alt="Vuejs app on Cosmicjs" align="center" /></div>
 
 <br />
 
