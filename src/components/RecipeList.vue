@@ -13,7 +13,7 @@
                 <v-flex md4 sm6 xs12 v-for="(recipe, index) in recipes" :key="index">
                     <v-card>
                         <router-link :to="{name:'recipe', params:{id:recipe._id}}">
-                            <v-card-media :src="recipe.metadata.feature_image.url" height="200px">
+                            <v-card-media :src="recipe.metadata.feature_image.url.replace(/ /g,'%20')" height="200px">
                             </v-card-media>
                         </router-link>
                         <v-card-title primary-title>
