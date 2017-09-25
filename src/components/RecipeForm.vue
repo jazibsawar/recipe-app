@@ -66,7 +66,7 @@
                   <v-text-field v-model="recipeModel.metadata.youtube_id" label="Youtube ID" :error-messages="errors.collect('youtube')" v-validate="'required'" data-vv-name="youtube" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <img class="upload_image" :src="recipeModel.metadata.feature_image.url" v-if="!!recipeModel.metadata.feature_image.url" />
+                  <img class="upload_image" :src="recipeModel.metadata.feature_image.url.replace(/ /g,'%20')" v-if="!!recipeModel.metadata.feature_image.url" />
                   <form enctype="multipart/form-data" novalidate>
                     <input type="file" @change="onFileChange" accept="image/*" data-vv-name="image" v-validate="'required|mimes:image/*'" required />
                     <div class="input-group fileUploadError">

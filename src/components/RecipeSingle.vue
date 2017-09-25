@@ -18,7 +18,7 @@
                     <v-layout row wrap>
                         <v-flex xs12 sm6 md4>
                             <v-card>
-                                <v-card-media :src="recipe.metadata.feature_image.url" height="300px">
+                                <v-card-media :src="recipe.metadata.feature_image.url.replace(/ /g,'%20')" height="300px">
                                 </v-card-media>
                             </v-card>
                         </v-flex>
